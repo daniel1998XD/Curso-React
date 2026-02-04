@@ -1,0 +1,22 @@
+​Cenário: Você foi contratado para criar a tela de
+ seleção de heróis de um jogo simples. O usuário deve
+  ver uma lista de botões com as classes (Guerreiro,
+   Mago, etc.) e, ao clicar, os detalhes daquele
+    herói devem aparecer na tela.
+
+Requisitos Obrigatórios (O que você deve codar)
+​Componente App (Principal):
+​Deve conter o useState para saber qual personagem está selecionado.
+​Deve renderizar a lista de botões dinamicamente usando .map() na array CHARACTERS.
+​Deve renderizar a área de detalhes.
+​Componente CharacterButton (Botão):
+​Deve receber o nome do personagem via children.
+​Deve receber uma função via props para avisar o App que foi clicado.
+​Deve mudar de estilo (classe "active") se ele estiver selecionado.
+​Componente CharacterDetails (Detalhes):
+​Deve receber o objeto do personagem selecionado via props.
+​Deve exibir o nome, a função (role) e a descrição.
+​Extra: As skills são uma lista (array). Tente exibir as skills usando .map() dentro desse componente também (uma lista <ul> dentro dos detalhes).
+​Lógica Condicional:
+​Se nenhum personagem estiver selecionado (estado inicial), mostre apenas um texto: "Escolha seu herói para começar".
+​Se houver um selecionado, mostre o componente CharacterDetails.

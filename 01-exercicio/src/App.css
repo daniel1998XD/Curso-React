@@ -1,0 +1,40 @@
+body {
+  background-color: #222;
+  color: white;
+  font-family: sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  background: #444;
+  color: white;
+  border: none;
+  font-size: 1rem;
+}
+button:hover {
+  background: #555;
+}
+button.active {
+  background: #e91e63;
+  font-weight: bold;
+} /* Cor destaque */
+.details-card {
+  border: 2px solid #e91e63;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+.details-card h2 {
+  color: #e91e63;
+}
+.skills-list li {
+  margin-bottom: 5px;
+  color: #aaa;
+}
