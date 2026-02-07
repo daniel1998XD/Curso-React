@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import Player from "./components/Player.jsx";
+import Log from "./components/Log.jsx";
 function App() {
   const [activePlayer, setActivePlayer] = useState("X");
   // Só para deixar claro este é o estado que esta sendo comentado XD: const [activePlayer, setActivePlayer] = useState("X");
@@ -12,8 +13,19 @@ function App() {
   // O componente Player vai receber true ou false para saber qual simbolo está jogando, e então trocar o estilo do css para destacor o player
   // O componente GameBoard vai receber o simbolo atual, para poder desenha-lo no tabuleiro
 
-  function handleSelectSquare() {
+  const [gameTurns, setGameTurns] =useState([])
+
+  function handleSelectSquare(rowIndex, colIndex) {
     setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
+    setGameTurns(prevTurns => {
+      let currentPlayer = 'X'
+
+      if (prevTurns.length >0 && prevTurns[0].player ==='X'){
+        currentPlayer = 'O'
+      }
+      const updatedTurns = [{square:{row: rowIndex, col: colIndex}, player:currentPlayer}, ...prevTurns]
+      return updatedTurns
+    });
   }
   return (
     // o header foi para o proprio html, para mostra que nada impede de usar html
@@ -35,9 +47,10 @@ function App() {
         </ol>
         <GameBoard
           onSelectSquare={handleSelectSquare}
-          activePlayerSymbol={activePlayer}
+          turns={gameTurns}
         />
       </div>
+      <Log />
     </main>
   );
 }
