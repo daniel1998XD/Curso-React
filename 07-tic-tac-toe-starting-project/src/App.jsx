@@ -4,10 +4,17 @@ import GameBoard from "./components/GameBoard.jsx";
 import Player from "./components/Player.jsx";
 function App() {
   const [activePlayer, setActivePlayer] = useState("X");
+  // Só para deixar claro este é o estado que esta sendo comentado XD: const [activePlayer, setActivePlayer] = useState("X");
+  // Lifting State Up, elevando o state, neste caso tanto o GameBoard quanto o Player precisam de um state em comum
+  // no caso de elevar o state e passa-lo como prop, os dois componentes conseguem agir no mesmo tempo e fazer a ação que precisa.
+  // Neste caso ambos precisam saber quem joga, o X ou o O, e por isso usa-se um estado que é pai dos dois para atualiza-los,
+  // e também é necessário fazer a troca da vez com a função handleSelectSquare.
+  // O componente Player vai receber true ou false para saber qual simbolo está jogando, e então trocar o estilo do css para destacor o player
+  // O componente GameBoard vai receber o simbolo atual, para poder desenha-lo no tabuleiro
 
   function handleSelectSquare() {
-    setActivePlayer((curActivePlayer) => curActivePlayer === 'X' ? 'O' : 'X');
-  } 
+    setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
+  }
   return (
     // o header foi para o proprio html, para mostra que nada impede de usar html
     // normalmente mesmo com o React, nem tudo precisa ser um componente
@@ -15,10 +22,21 @@ function App() {
     <main>
       <div id="game-container">
         <ol id="players" className="highlight-player">
-          <Player initialName="Player 1" symbol="X" isActive={activePlayer === "X"} />
-          <Player initialName="Player 2" symbol="O" isActive={activePlayer === "O"}/>
+          <Player
+            initialName="Player 1"
+            symbol="X"
+            isActive={activePlayer === "X"}
+          />
+          <Player
+            initialName="Player 2"
+            symbol="O"
+            isActive={activePlayer === "O"}
+          />
         </ol>
-        <GameBoard onSelectSquare={handleSelectSquare} activePlayerSymbol={activePlayer}/>
+        <GameBoard
+          onSelectSquare={handleSelectSquare}
+          activePlayerSymbol={activePlayer}
+        />
       </div>
     </main>
   );
