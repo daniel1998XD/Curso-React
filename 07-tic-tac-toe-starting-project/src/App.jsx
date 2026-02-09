@@ -3,14 +3,22 @@ import React from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import Player from "./components/Player.jsx";
 import Log from "./components/Log.jsx";
+import { WINNING_COMBINATIONS } from "./winning-combinations.js";
+// todas as condições de vitoria
 
-function deriveAtctivePlayer(gameTurns){
-  let currentPlayer = "X"
-  
-  if (gameTurns.length >0 && gameTurns[0].player ==='X'){
-        currentPlayer = 'O'
-      }
-      return currentPlayer
+const initialGameBoard = [
+  [null, null, null], //linha 0, coluna 0, 1, 2
+  [null, null, null], //linha 1, coluna 0, 1, 2
+  [null, null, null], //linha 2, coluna 0, 1, 2
+];
+
+function deriveAtctivePlayer(gameTurns) {
+  let currentPlayer = "X";
+
+  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+    currentPlayer = "O";
+  }
+  return currentPlayer;
 }
 
 function App() {
@@ -23,23 +31,55 @@ function App() {
   // O componente Player vai receber true ou false para saber qual simbolo está jogando, e então trocar o estilo do css para destacor o player
   // O componente GameBoard vai receber o simbolo atual, para poder desenha-lo no tabuleiro
 
-  const [gameTurns, setGameTurns] =useState([])
+  const [gameTurns, setGameTurns] = useState([]);
 
-  const activePlayer = deriveAtctivePlayer(gameTurns)
+  const activePlayer = deriveAtctivePlayer(gameTurns);
 
   function handleSelectSquare(rowIndex, colIndex) {
     // setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
-    setGameTurns(prevTurns => {
+    setGameTurns((prevTurns) => {
       // let currentPlayer = 'X'
 
       // if (prevTurns.length >0 && prevTurns[0].player ==='X'){
       //   currentPlayer = 'O'
       // }
-      const currentPlayer = deriveAtctivePlayer(prevTurns)
-      const updatedTurns = [{square:{row: rowIndex, col: colIndex}, player:currentPlayer}, ...prevTurns]
-      return updatedTurns
+      const currentPlayer = deriveAtctivePlayer(prevTurns);
+      const updatedTurns = [
+        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+        ...prevTurns,
+      ];
+      return updatedTurns;
     });
   }
+
+  let gameBoard = initialGameBoard;
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+
+    gameBoard[row][col] = player;
+  }
+
+  let winner
+
+  for (const combinations of WINNING_COMBINATIONS) {
+    const firstSquareSymbol =
+      gameBoard[combinations[0].row][combinations[0].column];
+    const secondSquareSymbol =
+      gameBoard[combinations[1].row][combinations[1].column];
+    const thirdSquareSymbol =
+      gameBoard[combinations[2].row][combinations[2].column];
+
+    if (
+      firstSquareSymbol &&
+      firstSquareSymbol === secondSquareSymbol &&
+      firstSquareSymbol === thirdSquareSymbol
+    ) {
+      winner = firstSquareSymbol
+    }
+  }
+
   return (
     // o header foi para o proprio html, para mostra que nada impede de usar html
     // normalmente mesmo com o React, nem tudo precisa ser um componente
@@ -58,12 +98,10 @@ function App() {
             isActive={activePlayer === "O"}
           />
         </ol>
-        <GameBoard
-          onSelectSquare={handleSelectSquare}
-          turns={gameTurns}
-        />
+        {winner && <p>You won, {winner}</p>}
+        <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
-      <Log turns={gameTurns}/>
+      <Log turns={gameTurns} />
     </main>
   );
 }

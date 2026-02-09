@@ -1,19 +1,8 @@
 // estrutura inicial da matriz que sera o tabuleiro, linhas x colunas
-const initialGameBoard = [
-  [null, null, null], //linha 0, coluna 0, 1, 2
-  [null, null, null], //linha 1, coluna 0, 1, 2
-  [null, null, null], //linha 2, coluna 0, 1, 2
-];
 
-export default function GameBoard({ onSelectSquare, turns }) {
-  let gameBoard = initialGameBoard;
 
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
+export default function GameBoard({ onSelectSquare, board }) {
+  
 
   // const [gameBoard, setGameBoard] = useState(initialGameBoard);
 
@@ -44,7 +33,7 @@ export default function GameBoard({ onSelectSquare, turns }) {
   return (
     <ol id="game-board">
       {/* primeiro .map serve para fazer a lista ordenada das linhas */}
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
             {/* segundo .map serve para fazer as colunas passando dentro de cada linha */}
