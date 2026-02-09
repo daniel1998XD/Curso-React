@@ -50,7 +50,7 @@ export default function GameBoard({ onSelectSquare, turns }) {
             {/* segundo .map serve para fazer as colunas passando dentro de cada linha */}
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() =>onSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
+                <button onClick={() =>onSelectSquare(rowIndex, colIndex)} disabled={playerSymbol !== null}>{playerSymbol}</button>
               </li>
             ))}
           </ol>
