@@ -3,8 +3,18 @@ import React from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import Player from "./components/Player.jsx";
 import Log from "./components/Log.jsx";
+
+function deriveAtctivePlayer(gameTurns){
+  let currentPlayer = "X"
+  
+  if (gameTurns.length >0 && gameTurns[0].player ==='X'){
+        currentPlayer = 'O'
+      }
+      return currentPlayer
+}
+
 function App() {
-  const [activePlayer, setActivePlayer] = useState("X");
+  // const [activePlayer, setActivePlayer] = useState("X");
   // Só para deixar claro este é o estado que esta sendo comentado XD: const [activePlayer, setActivePlayer] = useState("X");
   // Lifting State Up, elevando o state, neste caso tanto o GameBoard quanto o Player precisam de um state em comum
   // no caso de elevar o state e passa-lo como prop, os dois componentes conseguem agir no mesmo tempo e fazer a ação que precisa.
@@ -15,14 +25,17 @@ function App() {
 
   const [gameTurns, setGameTurns] =useState([])
 
-  function handleSelectSquare(rowIndex, colIndex) {
-    setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
-    setGameTurns(prevTurns => {
-      let currentPlayer = 'X'
+  const activePlayer = deriveAtctivePlayer(gameTurns)
 
-      if (prevTurns.length >0 && prevTurns[0].player ==='X'){
-        currentPlayer = 'O'
-      }
+  function handleSelectSquare(rowIndex, colIndex) {
+    // setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
+    setGameTurns(prevTurns => {
+      // let currentPlayer = 'X'
+
+      // if (prevTurns.length >0 && prevTurns[0].player ==='X'){
+      //   currentPlayer = 'O'
+      // }
+      const currentPlayer = deriveAtctivePlayer(prevTurns)
       const updatedTurns = [{square:{row: rowIndex, col: colIndex}, player:currentPlayer}, ...prevTurns]
       return updatedTurns
     });
