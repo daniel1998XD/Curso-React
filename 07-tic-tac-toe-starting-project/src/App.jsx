@@ -3,6 +3,7 @@ import React from "react";
 import GameBoard from "./components/GameBoard.jsx";
 import Player from "./components/Player.jsx";
 import Log from "./components/Log.jsx";
+import GameOver from "./components/GameOver.jsx";
 import { WINNING_COMBINATIONS } from "./winning-combinations.js";
 // todas as condições de vitoria
 
@@ -52,7 +53,7 @@ function App() {
     });
   }
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map(array => [...array])];
 
   for (const turn of gameTurns) {
     const { square, player } = turn;
@@ -61,7 +62,7 @@ function App() {
     gameBoard[row][col] = player;
   }
 
-  let winner
+  let winner;
 
   for (const combinations of WINNING_COMBINATIONS) {
     const firstSquareSymbol =
@@ -76,8 +77,14 @@ function App() {
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol
+      winner = firstSquareSymbol;
     }
+  }
+
+  const hasDraw = gameTurns.length === 9 && !winner;
+
+  function handleRematch(){
+    setGameTurns([])
   }
 
   return (
@@ -98,7 +105,7 @@ function App() {
             isActive={activePlayer === "O"}
           />
         </ol>
-        {winner && <p>You won, {winner}</p>}
+        {(winner || hasDraw )&& <GameOver winner={winner} onRestart={handleRematch}/>}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
       <Log turns={gameTurns} />
