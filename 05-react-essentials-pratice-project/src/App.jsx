@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Header from "./components/Header"
-import InputBox from "./components/InputBox"
-import Result from "./components/Result"
+import Header from "./components/Header";
+import InputBox from "./components/InputBox";
+import Result from "./components/Result";
 
 function App() {
   const [userInput, setUserInput] = useState({
@@ -10,6 +10,7 @@ function App() {
     expectedReturn: 10,
     duration: 10,
   });
+  const inputIsValid = userInput.duration >= 1;
   function handleChange(inputIndentifier, newValue) {
     setUserInput((prevUserInput) => {
       return { ...prevUserInput, [inputIndentifier]: +newValue };
@@ -17,11 +18,14 @@ function App() {
   }
   return (
     <>
-    <Header />
-    <InputBox userInput={userInput} onChange={handleChange}/>
-    <Result userInput={userInput}/>
+      <Header />
+      <InputBox userInput={userInput} onChange={handleChange} />
+      {!inputIsValid && (
+        <p className="center">Please enter a duration greater than 0</p>
+      )}
+      {inputIsValid && <Result userInput={userInput} />}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
