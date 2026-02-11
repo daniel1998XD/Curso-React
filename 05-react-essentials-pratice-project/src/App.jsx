@@ -5,10 +5,10 @@ import Result from "./components/Result"
 
 function App() {
   const [userInput, setUserInput] = useState({
-    initialInvestment: 0,
-    annualInvestment: 0,
-    expectedReturn: 0,
-    duration: 0,
+    initialInvestment: 10,
+    annualInvestment: 10,
+    expectedReturn: 10,
+    duration: 10,
   });
   function handleChange(inputIndentifier, newValue) {
     setUserInput((prevUserInput) => {
@@ -19,7 +19,7 @@ function App() {
     <>
     <Header />
     <InputBox userInput={userInput} onChange={handleChange}/>
-    <Result />
+    <Result userInput={userInput}/>
     </>
   )
 }
