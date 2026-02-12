@@ -4,6 +4,15 @@ import { calculateInvestmentResults, formatter } from '../util/investment.js';
 export default function Results({ input }) {
   const results = [];
   calculateInvestmentResults(input, results);
+  // Correção de bug por ter um valor undefined, atraves do f12 - console
+  // podemos ver "Uncaught TypeError: Cannot read properties of undefined (reading 'valueEndOfYear')
+  //   at Results (Results.jsx:12:16)", (Results.jsx:12:16) aqui temos o nome da classe, 12 é linha e 16 é coluna
+  //   tornando o debugg mais facil de se entender
+
+  // Correção:
+  if (results.length === 0 ){
+    return <p className='center'>Invalid input data provied.</p>
+  }
   const initialInvestment =
     results[0].valueEndOfYear -
     results[0].interest -
