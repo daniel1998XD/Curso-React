@@ -16,7 +16,10 @@ function App() {
     setUserInput((prevUserInput) => {
       return {
         ...prevUserInput,
-        [inputIdentifier]: newValue,
+        // correção do erro onde soma strings, o sinal de + antes da variavel converte string em numero
+        // este bug foi encontrado através da aba Sources, clicando no componente
+        // que está a logica falha, podemos adicionar break point para analisar as entradas do codigo e qual falha logica
+        [inputIdentifier]: +newValue,
       };
     });
   }
