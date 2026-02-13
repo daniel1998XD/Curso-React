@@ -1,6 +1,11 @@
+
 import { calculateInvestmentResults, formatter } from '../util/investment.js';
 
-
+// apenas para fins educacionais, onde foi usado o StrictMode para executar as 
+// funções 2x, assim vendo possiveis problemas, no caso results nunca era resetado
+// e ficava adicionando cada vez mais e mais elementos no array
+// pode ser visto no index.jsx, acoplando o componente App 
+// const results = [];
 export default function Results({ input }) {
   const results = [];
   calculateInvestmentResults(input, results);
