@@ -5,6 +5,13 @@ export default function Project({
   setProject,
   optionChosen,
 }) {
+  const formattedDate = new Date(projects.date).toLocaleDateString('pt-BR', {
+    day: 'numeric',
+    month: '2-digit',
+    year: 'numeric',
+  })
+
+
   const task = useRef();
   function handleClick() {
     setProject("delete");
@@ -23,7 +30,7 @@ export default function Project({
           Delete
         </button>
       </div>
-      <p className="text-zinc-400">{projects.date}</p>
+      <p className="text-zinc-400">{formattedDate}</p>
       <p>{projects.description}</p>
       <hr />
       <h1 className="font-bold text-[1.8rem]">Tasks</h1>
