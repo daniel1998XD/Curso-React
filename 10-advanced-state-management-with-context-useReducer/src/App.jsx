@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import Header from "./components/Header.jsx";
 import Shop from "./components/Shop.jsx";
 import { DUMMY_PRODUCTS } from "./dummy-products.js";
 import Product from "./components/Product.jsx";
+import { CartContext } from "./store/shopping-cart-context.jsx";
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({
@@ -67,7 +68,10 @@ function App() {
   }
 
   return (
-    <>
+    // usando o contexto que abraça tudo onde vai poder ser usado 
+    // o .Provider é do React, para usar como um componente em aplicações 
+    // com versão menor que REACT 19, se for maior só usa como componente msm
+    <CartContext.Provider>
       <Header
         cart={shoppingCart}
         onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
@@ -80,7 +84,7 @@ function App() {
             </li>
           ))}
       </Shop>
-    </>
+    </CartContext.Provider>
   );
 }
 
