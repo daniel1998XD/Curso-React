@@ -1,4 +1,12 @@
-export default function Cart({ items, onUpdateItemQuantity }) {
+// import { use } from "react"; Uma opção de useContext para React >= 19, é até melhor pois da pra usar dentro de uma condicional
+import { useContext } from "react";
+import { CartContext } from "../store/shopping-cart-context";
+export default function Cart({ onUpdateItemQuantity }) {
+  //Aqui poderia ser usado apena use, se o import fosse use
+  //é melhor, porem não funciona em react < 19
+  const { items } = useContext(CartContext)
+  // só para lembrar aqui foi usado a Destructuring
+
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
