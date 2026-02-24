@@ -1,77 +1,12 @@
-import React, { useState } from "react";
 
 import Header from "./components/Header.jsx";
 import Shop from "./components/Shop.jsx";
 import { DUMMY_PRODUCTS } from "./dummy-products.js";
 import Product from "./components/Product.jsx";
-import { CartContext } from "./store/shopping-cart-context.jsx";
+import CartContextProvider, { CartContext } from "./store/shopping-cart-context.jsx";
 
 function App() {
-  const [shoppingCart, setShoppingCart] = useState({
-    items: [],
-  });
-
-  function handleAddItemToCart(id) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
-
-      const existingCartItemIndex = updatedItems.findIndex(
-        (cartItem) => cartItem.id === id,
-      );
-      const existingCartItem = updatedItems[existingCartItemIndex];
-
-      if (existingCartItem) {
-        const updatedItem = {
-          ...existingCartItem,
-          quantity: existingCartItem.quantity + 1,
-        };
-        updatedItems[existingCartItemIndex] = updatedItem;
-      } else {
-        const product = DUMMY_PRODUCTS.find((product) => product.id === id);
-        updatedItems.push({
-          id: id,
-          name: product.title,
-          price: product.price,
-          quantity: 1,
-        });
-      }
-
-      return {
-        items: updatedItems,
-      };
-    });
-  }
-
-  function handleUpdateCartItemQuantity(productId, amount) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
-      const updatedItemIndex = updatedItems.findIndex(
-        (item) => item.id === productId,
-      );
-
-      const updatedItem = {
-        ...updatedItems[updatedItemIndex],
-      };
-
-      updatedItem.quantity += amount;
-
-      if (updatedItem.quantity <= 0) {
-        updatedItems.splice(updatedItemIndex, 1);
-      } else {
-        updatedItems[updatedItemIndex] = updatedItem;
-      }
-
-      return {
-        items: updatedItems,
-      };
-    });
-  }
-
-
-  const valueCtx = {
-    items:shoppingCart.items,
-    addItemToCart:handleAddItemToCart,
-  }
+  
   return (
     // usando o contexto que abraça tudo onde vai poder ser usado 
     // o .Provider é do React, para usar como um componente em aplicações 
@@ -80,20 +15,24 @@ function App() {
     
     // esse value é extremamente importante, se você tem um valor
     // voce precisa dele para não quebrar a aplicação
-    <CartContext.Provider value={valueCtx}>
-      <Header
-        cart={shoppingCart}
-        onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
-      />
+
+    // <CartContext value{valueCtx}>
+    //   todo o codigo que agora esta em shopping-cart-context.jsx
+    // </CartContext>
+
+    // para o App.js não ficar com muita coisa escrita, ele foi migrado para o shopping-cart-context.jsx
+    // deixando mais organizado, sendo uma boa pratica e como geralmente se ve
+    <CartContextProvider>
+      <Header />
       {/* <Shop onAddItemToCart={handleAddItemToCart} /> */}
       <Shop >
           {DUMMY_PRODUCTS.map((product) => (
             <li key={product.id}>
-              <Product {...product} onAddToCart={handleAddItemToCart} />
+              <Product {...product} />
             </li>
           ))}
       </Shop>
-    </CartContext.Provider>
+    </CartContextProvider>
   );
 }
 
