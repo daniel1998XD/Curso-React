@@ -67,14 +67,20 @@ function App() {
     });
   }
 
+
+  const valueCtx = {
+    items:shoppingCart.items,
+    addItemToCart:handleAddItemToCart,
+  }
   return (
     // usando o contexto que abraça tudo onde vai poder ser usado 
     // o .Provider é do React, para usar como um componente em aplicações 
     // com versão menor que REACT 19, se for maior só usa como componente msm
 
+    
     // esse value é extremamente importante, se você tem um valor
     // voce precisa dele para não quebrar a aplicação
-    <CartContext.Provider value={{items:[]}}>
+    <CartContext.Provider value={valueCtx}>
       <Header
         cart={shoppingCart}
         onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
