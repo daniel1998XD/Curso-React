@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer } from "react";
 import { DUMMY_PRODUCTS } from "../dummy-products";
 import App from "../App";
 
@@ -6,61 +6,55 @@ import App from "../App";
 export const CartContext = createContext({
   // o valor default serve para autocompletar, facilitando a programação
   items: [],
-//   uma função sem nada apenas para ajudar no auto complete 
-  addItemToCart: () => {}, 
+  //   uma função sem nada apenas para ajudar no auto complete
+  addItemToCart: () => {},
   updateItemQuantity: () => {},
 });
 
+function shoppingCartReducer(state, action) {
+  if (action.type === "ADD_ITEM") {
+    const updatedItems = [...state.items];
 
-// Criando aqui a função que vai ser chamada no App.js, deixando mais organizado
-export default function CartContextProvider({children}){
-  const [shoppingCart, setShoppingCart] = useState({
-    items: [],
-  });
+    const existingCartItemIndex = updatedItems.findIndex(
+      (cartItem) => cartItem.id === action.payload,
+    );
+    const existingCartItem = updatedItems[existingCartItemIndex];
 
-  function handleAddItemToCart(id) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
-
-      const existingCartItemIndex = updatedItems.findIndex(
-        (cartItem) => cartItem.id === id,
-      );
-      const existingCartItem = updatedItems[existingCartItemIndex];
-
-      if (existingCartItem) {
-        const updatedItem = {
-          ...existingCartItem,
-          quantity: existingCartItem.quantity + 1,
-        };
-        updatedItems[existingCartItemIndex] = updatedItem;
-      } else {
-        const product = DUMMY_PRODUCTS.find((product) => product.id === id);
-        updatedItems.push({
-          id: id,
-          name: product.title,
-          price: product.price,
-          quantity: 1,
-        });
-      }
-
-      return {
-        items: updatedItems,
+    if (existingCartItem) {
+      const updatedItem = {
+        ...existingCartItem,
+        quantity: existingCartItem.quantity + 1,
       };
-    });
+      updatedItems[existingCartItemIndex] = updatedItem;
+    } else {
+      const product = DUMMY_PRODUCTS.find(
+        (product) => product.id === action.payload,
+      );
+      updatedItems.push({
+        id: action.payload,
+        name: product.title,
+        price: product.price,
+        quantity: 1,
+      });
+    }
+
+    return {
+      ...state,
+      items: updatedItems,
+    };
   }
 
-  function handleUpdateCartItemQuantity(productId, amount) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
+  if(action.type === 'UPDATE_ITEM'){
+    const updatedItems = [...state.items];
       const updatedItemIndex = updatedItems.findIndex(
-        (item) => item.id === productId,
+        (item) => item.id === action.payload.productId,
       );
 
       const updatedItem = {
         ...updatedItems[updatedItemIndex],
       };
 
-      updatedItem.quantity += amount;
+      updatedItem.quantity += action.payload.amount;
 
       if (updatedItem.quantity <= 0) {
         updatedItems.splice(updatedItemIndex, 1);
@@ -69,20 +63,48 @@ export default function CartContextProvider({children}){
       }
 
       return {
+        ...state,
         items: updatedItems,
       };
+  }
+
+  return state;
+}
+
+// Criando aqui a função que vai ser chamada no App.js, deixando mais organizado
+export default function CartContextProvider({ children }) {
+  const [shoppingCartState, shoppingCartDispatch] = useReducer(
+    shoppingCartReducer,
+    {
+      items: [],
+    },
+  );
+
+  
+
+  function handleAddItemToCart(id) {
+    shoppingCartDispatch({
+      type: "ADD_ITEM",
+      payload: id,
     });
   }
 
+  function handleUpdateCartItemQuantity(productId, amount) {
+    shoppingCartDispatch({
+      type: "UPDATE_ITEM",
+      payload: {
+        productId,
+        amount,
+      },
+    });
+  }
 
   const valueCtx = {
-    items:shoppingCart.items,
-    addItemToCart:handleAddItemToCart,
-    updateItemQuantity:handleUpdateCartItemQuantity,
-  }
+    items: shoppingCartState.items,
+    addItemToCart: handleAddItemToCart,
+    updateItemQuantity: handleUpdateCartItemQuantity,
+  };
   // precisa do return, onde vai receber como valor a mesma coisa de antes,
   // e receber o children
-  return <CartContext value={valueCtx}>
-    {children}
-  </CartContext>
+  return <CartContext value={valueCtx}>{children}</CartContext>;
 }
