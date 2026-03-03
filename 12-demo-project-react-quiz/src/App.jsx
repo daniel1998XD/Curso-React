@@ -1,9 +1,12 @@
 import Questions from "./components/Questions";
 
 function App() {
-    return <>
-        <Questions />
+  
+  return (
+    <>
+      <Questions />
     </>
+  );
 }
-    
+
 export default App;
